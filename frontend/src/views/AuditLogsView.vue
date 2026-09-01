@@ -1,0 +1,8 @@
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import { adminApi } from '../api/admin'
+const logs=ref<any[]>([]);const total=ref(0);const action=ref('');const resourceType=ref('');const loading=ref(false);const error=ref('')
+async function load(){loading.value=true;try{const r=(await adminApi.auditLogs(action.value,resourceType.value,100,0)).data.data;logs.value=r.items;total.value=r.total}catch(e:any){error.value=e.response?.data?.detail||e.message}finally{loading.value=false}}
+onMounted(load)
+</script>
+<template><section class="table-module"><div class="module-header"><div><span class="module-kicker">AUDIT TRAIL</span><h2>审计查询</h2></div><span class="table-summary">共 {{total}} 条</span></div><div class="module-tools"><select v-model="action" @change="load"><option value="">全部操作</option><option value="soft_delete">软删除</option><option value="restore">恢复</option></select><select v-model="resourceType" @change="load"><option value="">全部对象</option><option value="user">用户</option><option value="product">产品</option></select><button class="table-action" @click="load">刷新</button></div><p v-if="error" class="error">{{error}}</p><div v-if="loading" class="empty">正在读取审计记录…</div><div v-else class="module-table-wrap"><table class="admin-table"><thead><tr><th>时间</th><th>操作</th><th>对象</th><th>对象 ID</th><th>操作人 ID</th><th>详情</th></tr></thead><tbody><tr v-for="log in logs" :key="log.id"><td>{{log.created_at}}</td><td>{{log.action}}</td><td>{{log.resource_type}}</td><td>{{log.resource_id}}</td><td>{{log.actor_user_id}}</td><td>{{log.detail}}</td></tr><tr v-if="!logs.length"><td colspan="6" class="table-empty">暂无审计记录</td></tr></tbody></table></div></section></template>

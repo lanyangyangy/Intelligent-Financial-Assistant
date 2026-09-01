@@ -1,0 +1,46 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.env.*
+!.env.example
+!.env.p0.example
+.env.profile-console.local
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.streamlit/
+docs/DEMO_ACCOUNTS.txt
+**/DEMO_ACCOUNTS.txt
+logs/
+# Local/build artifacts
+frontend/node_modules/
+frontend/dist/
+*.log
+*.zip
+*.pid
+.coverage
+htmlcov/
+# Temporary debug files (local only)
+.tmp_*
+
+# Local environment backups and isolated test worktrees
+.venv.py39.backup-*/
+.pytest-isolated-*/
+.pytest_codex_temp/
+.codex-pytest-cache/
+.codex-pytest-tmp/
+*.rar
+
+# Personal / local-only materials (not published to the repository)
+/答辩准备/
+/公司信息/
+/公司业务/
+/金融政策/
+/用户测试数据/
+/用户研判规则/
+/用户画像数据分析后端/
+/docs/对话记录/
+/开发引导.md
+/答辩须知.md
+/答辩所需文本交付物清单.txt

@@ -1,0 +1,11 @@
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { profileApi } from '../api/profile'
+const router=useRouter()
+const form=ref({company_name:'',registration_no:'',legal_representative:'',contact_phone:''}); const current=ref<any>(null); const error=ref(''); const message=ref(''); const loading=ref(true)
+async function load(){try{current.value=(await profileApi.enterpriseVerification()).data.data;if(current.value) form.value={company_name:current.value.company_name,registration_no:current.value.registration_no,legal_representative:current.value.legal_representative,contact_phone:current.value.contact_phone}}catch(e:any){error.value=e.response?.data?.detail||e.message}finally{loading.value=false}}
+async function submit(){try{message.value='';error.value='';current.value=(await profileApi.submitEnterpriseVerification(form.value)).data.data;message.value='企业认证申请已提交，等待管理员审核。'}catch(e:any){error.value=e.response?.data?.detail||e.message}}
+onMounted(load)
+</script>
+<template><section class="form-module"><div class="enterprise-page-actions"><button class="text-button" type="button" @click="router.push('/customer-center')">← 返回客户中心</button><button class="text-button" type="button" @click="router.push('/')">返回前台</button></div><div class="section-heading"><div><span class="eyebrow">ENTERPRISE VERIFICATION</span><h2>企业客户认证</h2><p>企业客户需提交资料，经管理员审核后才会转为企业客户。</p></div></div><p v-if="error" class="error">{{error}}</p><p v-if="message" class="success">{{message}}</p><div v-if="loading" class="empty">正在读取认证状态…</div><template v-else><div v-if="current" class="profile-panel"><strong>当前状态：{{current.status}}</strong><p v-if="current.review_note">审核意见：{{current.review_note}}</p></div><form class="product-editor-grid" @submit.prevent="submit"><label class="full">企业名称<input v-model="form.company_name" required /></label><label>统一社会信用代码<input v-model="form.registration_no" /></label><label>法定代表人<input v-model="form.legal_representative" /></label><label>联系电话<input v-model="form.contact_phone" /></label><label class="full"><button class="button" :disabled="current?.status==='approved'">{{current?.status==='approved'?'已认证':'提交认证申请'}}</button></label></form></template></section></template>

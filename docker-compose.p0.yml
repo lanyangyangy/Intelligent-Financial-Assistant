@@ -1,0 +1,72 @@
+name: ${COMPOSE_PROJECT_NAME:-intelligent-wealth-manager}
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-wealth_manager}
+      POSTGRES_USER: ${POSTGRES_USER:-wealth}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-wealth_dev}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --locale=C"
+    ports:
+      - "${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-wealth} -d ${POSTGRES_DB:-wealth_manager}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    networks:
+      - wealth
+
+  redis:
+    image: redis:7.4-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--save", "60", "1"]
+    ports:
+      - "${REDIS_PORT:-6380}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    networks:
+      - wealth
+
+  neo4j:
+    profiles: ["graph"]
+    image: neo4j:5-community
+    restart: unless-stopped
+    environment:
+      NEO4J_AUTH: "${NEO4J_USER:-neo4j}/${NEO4J_PASSWORD:-password123}"
+    ports:
+      - "${NEO4J_HTTP_PORT:-17474}:7474"
+      - "${NEO4J_BOLT_PORT:-17687}:7687"
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "cypher-shell -u \"$${NEO4J_AUTH%%/*}\" -p \"$${NEO4J_AUTH#*/}\" 'RETURN 1' >/dev/null 2>&1",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 18
+    networks:
+      - wealth
+
+volumes:
+  postgres_data:
+  redis_data:
+  neo4j_data:
+  neo4j_logs:
+
+networks:
+  wealth:

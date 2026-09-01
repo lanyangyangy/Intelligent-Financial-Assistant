@@ -1,0 +1,38 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+norecursedirs = [".git", ".venv", "frontend", "用户画像数据分析后端"]
+addopts = "-ra --strict-markers"
+markers = [
+    "unit: 纯单元测试，不访问网络、数据库和 Redis",
+    "integration: 需要真实 PostgreSQL/Redis（docker compose -f docker-compose.p0.yml up -d --wait）",
+    "e2e: 需要启动完整 HTTP 服务（tests/test_http_*.py 以脚本方式运行）",
+]
+
+[tool.coverage.run]
+source = ["app"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+# unit 层覆盖率约 33%（数据库/HTTP 路径由 integration/e2e 覆盖，未计入此统计）；
+# 不设 fail_under 假门槛，覆盖率仅作展示与趋势参考。
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+
+[tool.ruff.lint]
+# 聚焦高价值规则：关键错误(E4/E7/E9)、pyflakes(F)、import 排序(I)、pyupgrade(UP)
+select = ["E4", "E7", "E9", "F", "I", "UP"]
+# 历史代码存在大量一行多语句风格，非致命问题，允许保留
+ignore = ["E701", "E702"]
+
+[tool.ruff.lint.per-file-ignores]
+# 包聚合 re-export 惯例
+"**/__init__.py" = ["F401"]
+# API 模块从 schemas 聚合导入（import * 是项目惯例）
+"app/api/*.py" = ["F403", "F405"]
+# 测试文件：docstring 后导入等测试惯例
+"tests/**" = ["E402", "F401", "F403", "F405"]

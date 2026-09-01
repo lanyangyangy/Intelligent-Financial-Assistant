@@ -1,0 +1,53 @@
+# Wealth Manager current development dependencies
+# Target environment: conda langchain_env, Python 3.12+
+
+# Web/API
+fastapi>=0.140,<1
+uvicorn[standard]>=0.51,<1
+streamlit>=1.60,<2
+
+# Configuration and validation
+pydantic>=2.13,<3
+pydantic-settings>=2.14,<3
+python-dotenv>=1.0,<2
+PyJWT>=2.8,<3
+argon2-cffi>=25,<26
+
+
+# Async PostgreSQL and migrations
+SQLAlchemy>=2.0.51,<3
+asyncpg>=0.31,<1
+aiomysql>=0.2,<1
+psycopg>=3.3,<4
+alembic>=1.18,<2
+pgvector>=0.3,<1
+
+# Redis Streams / cache
+redis>=5.2,<8
+
+# HTTP and model clients
+httpx>=0.28,<1
+openai>=2.48,<3
+
+# Agent framework: LangChain/LangGraph V1.0 version lines
+langchain>=1.0,<2
+langchain-core>=1.0,<2
+langchain-community>=0.4,<1
+langgraph>=1.0,<2
+# langchain-openai remains on its compatible 0.x line while LangChain/LangGraph
+# themselves use V1.0 APIs.
+langchain-openai>=0.3,<1
+
+# RAG evaluation
+datasets>=5,<6
+ragas==0.2.15
+FlagEmbedding>=1.4,<2
+
+# The application imports the driver even when GraphRAG is disabled at runtime.
+neo4j>=5,<7
+
+# Testing
+pytest>=8,<10
+pytest-cov>=6,<8
+ruff>=0.11,<1
+coverage>=7,<8

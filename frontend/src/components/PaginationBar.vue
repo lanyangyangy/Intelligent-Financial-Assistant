@@ -1,0 +1,5 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+const props=defineProps<{page:number;pageSize:number;total:number}>();const emit=defineEmits<{change:[page:number];sizeChange:[size:number]}>();const pages=computed(()=>Math.max(1,Math.ceil(props.total/props.pageSize)));function jump(e:Event){const n=Number((e.target as HTMLInputElement).value);if(Number.isFinite(n))emit('change',Math.min(Math.max(Math.floor(n),1),pages.value))}
+</script>
+<template><div class="pagination-bar"><span>共 {{total}} 条</span><label>每页 <select :value="pageSize" @change="emit('sizeChange',Number(($event.target as HTMLSelectElement).value))"><option :value="10">10</option><option :value="20">20</option><option :value="50">50</option><option :value="100">100</option></select> 条</label><button :disabled="page<=1" @click="emit('change',page-1)">上一页</button><span>第 {{page}} / {{pages}} 页</span><input type="number" min="1" :max="pages" :value="page" @keyup.enter="jump"/><button @click="emit('change',page+1)" :disabled="page>=pages">下一页</button></div></template>

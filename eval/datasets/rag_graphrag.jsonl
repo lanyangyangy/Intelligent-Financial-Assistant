@@ -1,0 +1,20 @@
+{"id": "RG-001", "category": "rag_graphrag", "kind": "doc_exists", "name": "公司知识文档存在", "input": "BUSINESS_KNOWLEDGE_COMPANY.md", "min_bytes": 1024, "expected": null, "hard_gate": false, "notes": "RAG 知识库底座：公司信息"}
+{"id": "RG-002", "category": "rag_graphrag", "kind": "doc_exists", "name": "政策知识文档存在", "input": "BUSINESS_KNOWLEDGE_POLICIES.md", "min_bytes": 1024, "expected": null, "hard_gate": false, "notes": "金融政策/合规知识"}
+{"id": "RG-003", "category": "rag_graphrag", "kind": "doc_exists", "name": "产品知识文档存在", "input": "BUSINESS_KNOWLEDGE_PRODUCTS.md", "min_bytes": 1024, "expected": null, "hard_gate": false, "notes": "理财产品手册"}
+{"id": "RG-004", "category": "rag_graphrag", "kind": "doc_exists", "name": "风险知识文档存在", "input": "BUSINESS_KNOWLEDGE_RISK.md", "min_bytes": 1024, "expected": null, "hard_gate": false, "notes": "风控与适当性知识"}
+{"id": "RG-005", "category": "rag_graphrag", "kind": "doc_contains", "name": "公司文档覆盖核心业务词", "input": "BUSINESS_KNOWLEDGE_COMPANY.md", "expected": ["财富管理", "客户"], "hard_gate": false, "notes": "文档内容非空壳，覆盖核心业务"}
+{"id": "RG-006", "category": "rag_graphrag", "kind": "doc_contains", "name": "政策文档覆盖反洗钱关键词", "input": "BUSINESS_KNOWLEDGE_POLICIES.md", "expected": ["反洗钱", "适当性"], "hard_gate": true, "notes": "合规知识必须覆盖反洗钱与适当性"}
+{"id": "RG-007", "category": "rag_graphrag", "kind": "doc_contains", "name": "产品文档覆盖产品属性词", "input": "BUSINESS_KNOWLEDGE_PRODUCTS.md", "expected": ["风险等级", "投资期限"], "hard_gate": false, "notes": "产品检索回答的字段基础"}
+{"id": "RG-008", "category": "rag_graphrag", "kind": "neo4j_disabled_by_default", "name": "Neo4j 默认不启用", "input": "", "expected": null, "hard_gate": false, "notes": "图数据库可选依赖，默认回退纯 RAG（不强制常驻）"}
+{"id": "RG-009", "category": "rag_graphrag", "kind": "vector_adapter_present", "name": "pgvector 检索适配器存在", "input": "", "expected": null, "hard_gate": false, "notes": "PostgreSQL/pgvector 向量检索路径"}
+{"id": "RG-010", "category": "rag_graphrag", "kind": "doc_contains", "name": "风险文档覆盖风险研判关键词", "input": "BUSINESS_KNOWLEDGE_RISK.md", "expected": ["风险等级", "投资者"], "hard_gate": true, "notes": "投资者风险研判是风控的基础知识"}
+{"id": "RG-011", "category": "rag_graphrag", "kind": "script_exists", "name": "知识文档灌入脚本存在", "input": "scripts/seed_knowledge_docs.py", "expected": null, "hard_gate": false, "notes": "知识库可复现灌入"}
+{"id": "RG-012", "category": "rag_graphrag", "kind": "script_exists", "name": "知识图谱灌入脚本存在", "input": "scripts/seed_knowledge_graph.py", "expected": null, "hard_gate": false, "notes": "GraphRAG 数据可复现"}
+{"id": "RG-013", "category": "rag_graphrag", "kind": "script_exists", "name": "图谱动态同步脚本存在", "input": "scripts/sync_graph_dynamic.py", "expected": null, "hard_gate": false, "notes": "图谱动态更新（答辩亮点）"}
+{"id": "RG-014", "category": "rag_graphrag", "kind": "doc_exists", "name": "演示账号文档存在", "input": "DEMO_ACCOUNTS.md", "min_bytes": 512, "expected": null, "hard_gate": false, "notes": "演示可复现性文档"}
+{"id": "RG-015", "category": "rag_graphrag", "kind": "doc_contains", "name": "政策文档覆盖反洗钱交易词", "input": "BUSINESS_KNOWLEDGE_POLICIES.md", "expected": ["大额交易", "客户身份"], "hard_gate": true, "notes": "反洗钱手册核心义务词"}
+{"id": "RG-016", "category": "rag_graphrag", "kind": "doc_contains", "name": "产品文档覆盖期限与风险等级", "input": "BUSINESS_KNOWLEDGE_PRODUCTS.md", "expected": ["期限", "风险等级"], "hard_gate": false, "notes": "产品属性检索字段"}
+{"id": "RG-017", "category": "rag_graphrag", "kind": "doc_contains", "name": "风险文档覆盖反洗钱可疑词", "input": "BUSINESS_KNOWLEDGE_RISK.md", "expected": ["反洗钱", "可疑"], "hard_gate": true, "notes": "可疑交易识别是风控硬能力"}
+{"id": "RG-018", "category": "rag_graphrag", "kind": "knowledge_search_present", "name": "知识库混合检索适配器存在", "input": "", "expected": null, "hard_gate": false, "notes": "search_hybrid/search_text 是 RAG 检索实现证据"}
+{"id": "RG-019", "category": "rag_graphrag", "kind": "script_exists", "name": "Milvus 知识查询脚本存在", "input": "scripts/query_milvus_knowledge.py", "expected": null, "hard_gate": false, "notes": "向量库检索可观测工具"}
+{"id": "RG-020", "category": "rag_graphrag", "kind": "doc_exists", "name": "公司业务知识文档非空", "input": "BUSINESS_KNOWLEDGE_COMPANY.md", "min_bytes": 2048, "expected": null, "hard_gate": false, "notes": "文档质量基线（大于 2KB）"}

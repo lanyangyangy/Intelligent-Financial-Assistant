@@ -1,0 +1,7 @@
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import { tradingApi } from '../api/trading'
+const account=ref<any>(null);const orders=ref<any[]>([]);const error=ref('');const loading=ref(true)
+onMounted(async()=>{try{account.value=(await tradingApi.account()).data.data;orders.value=(await tradingApi.orders()).data.data}catch(e:any){error.value=e.response?.data?.detail||e.message}finally{loading.value=false}})
+</script>
+<template><section class="workspace-page"><div class="section-heading"><div><span class="eyebrow">CUSTOMER WORKSPACE</span><h2>客户个人中心</h2><p>在独立客户后台查看账户、订单和交易记录。</p></div><span class="pill">客户后台</span></div><p v-if="error" class="error">{{error}}</p><div v-if="loading" class="empty">正在读取客户账户…</div><template v-else><div class="metric-grid"><div class="metric-card"><span>可用余额</span><strong>¥{{account?.available_balance??0}}</strong></div><div class="metric-card"><span>冻结金额</span><strong>¥{{account?.frozen_balance??0}}</strong></div><div class="metric-card"><span>订单数量</span><strong>{{orders.length}}</strong></div></div><div class="workspace-links"><RouterLink class="dashboard-card" to="/customer-center/orders"><span class="card-kicker">ORDERS</span><h3>我的订单</h3><p>查看订单状态和交易记录。</p></RouterLink><RouterLink class="dashboard-card" to="/products"><span class="card-kicker">PRODUCTS</span><h3>浏览产品</h3><p>返回公开产品页进行购买。</p></RouterLink></div></template></section></template>
